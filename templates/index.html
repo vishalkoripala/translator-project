@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Translator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        textarea {
+            width: 60%;
+            height: 120px;
+            border-radius: 12px;
+            padding: 10px;
+            border: none;
+            font-size: 16px;
+        }
+
+        select, button {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            margin: 10px;
+            font-size: 15px;
+        }
+
+        button {
+            background: #ff7a18;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff512f;
+        }
+
+        .result-box {
+            background: white;
+            color: black;
+            margin: 20px auto;
+            padding: 15px;
+            width: 60%;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+<h1>🌍 AI Multi-Language Translator</h1>
+
+<form method="POST">
+    <button type="button" onclick="startSpeech()">🎤 Speak</button>
+    <textarea name="text" placeholder="Type or speak your text..."></textarea><br>
+
+    <select name="src">
+        <option value="auto">Auto Detect</option>
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+    </select>
+
+    <select name="tgt">
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+        <option value="en">English</option>
+    </select>
+
+    <br>
+    <button type="submit">Translate</button>
+</form>
+
+{% if google %}
+<div class="result-box">
+    <h3>🌐 Translation:</h3>
+    <p>{{ google }}</p>
+</div>
+{% endif %}
+
+{% if score is not none %}
+<div class="result-box">
+    <h3>📊 Accuracy: {{ score }}%</h3>
+
+    {% if flag %}
+        <p style="color:red;">⚠️ Low Accuracy</p>
+    {% else %}
+        <p style="color:green;">✔ Good Translation</p>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if message %}
+<div class="result-box">
+    <h3>🧠 Evaluation:</h3>
+    <p>{{ message }}</p>
+</div>
+{% endif %}
+{% if bleu is not none %}
+<div class="result-box">
+    <h3>📊 BLEU Score:</h3>
+    <p>{{ bleu }}%</p>
+</div>
+{% endif %}
+</body>
+</html>
+<script>
+function startSpeech() {
+    let recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-IN";
+
+    recognition.onresult = function(event) {
+        document.querySelector("textarea").value = event.results[0][0].transcript;
+    };
+
+    recognition.start();
+}
+</script>
