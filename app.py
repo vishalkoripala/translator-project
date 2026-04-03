@@ -103,4 +103,8 @@ import os
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
+<<<<<<< HEAD
     app.run(host="0.0.0.0", port=port)
+=======
+    app.run(host="0.0.0.0", port=port)
+>>>>>>> 0a5efa6f0c279c8ce22d820f19bea80514b87439
